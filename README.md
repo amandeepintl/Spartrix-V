@@ -2,59 +2,61 @@
 
 ## The Absolute Enforcement Nexus
 
-SPARTRIX-V is a Minecraft server anticheat plugin focused on server-authoritative enforcement, behavioral correlation, and admin-facing moderation workflows.
+SPARTRIX-V is a Minecraft Paper anticheat focused on server-side enforcement, behavioral correlation, compact staff alerts, and moderation workflows.
 
-This repository is **release-only**.
-It exists to distribute compiled plugin builds and release assets.
-Source code is not published here.
+This GitHub repository is **release-only**. It distributes compiled plugin jars and release notes. Source code is not published here.
 
-## Current Release
+## Current Snapshot
 
-Download the latest plugin jar from the [Releases](../../releases) page.
+Latest snapshot line:
 
-Current public release line:
-- `v0.1.0`
+- `v0.1.1-SNAPSHOT`
 
-## Compatibility
+Target platform:
 
 - Paper `1.21.11`
 - Java `21`
 
-## Current Feature Set
+## What SPARTRIX-V Does Today
 
-The current public build includes:
+This is an early snapshot build, not a final production anticheat. The current plugin provides a practical Paper-event foundation:
 
-- movement drift enforcement
-- reach envelope checks
-- auto-clicker entropy detection
-- inventory-move detection
-- far-place detection
-- ghost-hand style interaction checks
-- probation tracking
-- case-file generation
-- public `/hackflags` voting flow
-- `/sv` admin command and control GUI
+- Movement drift checks for obvious speed, flight, glide, step, high-jump, bunny-hop, and boat-fly style behavior.
+- Combat reach validation with hit distance checks.
+- Basic aura heuristics for bad attack angle and extremely fast target switching.
+- Auto-clicker entropy checks using CPS and click interval consistency.
+- Inventory-walk detection while player inventories are open.
+- Far-place and ghost-hand interaction checks.
+- Nuker, fast-break, and auto-drop burst checks.
+- Leaked hack-client command detection for commands such as `.bind`, `.setcheckbox`, `.enabledhax`, `.xray`, and similar client control commands.
+- Unified flag pipeline so movement, combat, inventory, world, voting, probation, and alerts all use the same evidence path.
+- Staff alert compression so operators see compact messages like `HorizontalDrift x6` instead of chat spam.
+- Sustained-cheat kick policy using a safer default: `5 seconds` + `6 detections` + `180 correlation score`.
+- Community oversight with `/hackflags`, voting, probation tracking, and staff case-file support.
 
 ## Commands
 
-- `/sv gui`
-- `/sv status`
-- `/sv reload`
-- `/hackflags`
-- `/hackflags vote <player>`
+- `/sv gui` opens the admin dashboard.
+- `/sv status` shows plugin status.
+- `/sv reload` reloads configuration.
+- `/hackflags` opens the public suspect interface.
+- `/hackflags vote <player>` records a community vote.
+
+## Important Detection Limits
+
+Some hacked-client modules are not directly provable from the server alone. Visual or local-only modules such as ESP overlays, Fullbright, NoFog, NoOverlay, keybind menus, GUI themes, and client settings do not send reliable evidence to Paper by themselves.
+
+SPARTRIX-V focuses on what a server can actually observe: movement, combat, clicking, inventory actions, block interactions, command leaks, packet-like behavior exposed through events, and repeated suspicious patterns.
 
 ## Installation
 
-1. Download the latest `.jar` from [Releases](../../releases).
-2. Put the jar into your server's `plugins/` folder.
-3. Start or restart your Paper server.
-4. Configure the plugin through its generated config files if needed.
+1. Download the latest `.jar` from the Releases page.
+2. Put the jar into your Paper server's `plugins/` folder.
+3. Restart the server.
+4. Use `/sv status` or `/sv gui` to confirm the plugin is loaded.
 
-## Notes
+## Release Policy
 
-- This plugin is currently distributed as a compiled binary release.
-- Public releases may change over time as new detection modules and enforcement systems are added.
+All current builds are snapshots. Snapshot builds are expected to change quickly while detection logic, thresholds, and admin tooling improve.
 
-## Support
-
-If you use this repository, use the release assets from the Releases page rather than cloning the repository contents.
+No source code is pushed to this public release repository.
