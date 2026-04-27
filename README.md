@@ -10,7 +10,7 @@ This GitHub repository is **release-only**. It distributes compiled plugin jars 
 
 Latest snapshot line:
 
-- `v0.1.1-SNAPSHOT`
+- `v0.1.2-SNAPSHOT`
 
 Target platform:
 
@@ -28,6 +28,10 @@ This is an early snapshot build, not a final production anticheat. The current p
 - Inventory-walk detection while player inventories are open.
 - Far-place and ghost-hand interaction checks.
 - Nuker, fast-break, and auto-drop burst checks.
+- Liquid-walk and wall-climb checks for Jesus/Spider-style movement.
+- Velocity grace handling to reduce false movement punishments after knockback or server-applied velocity.
+- Fast-consume and fast-bow timing checks.
+- Hotbar macro detection for extreme slot-switch bursts.
 - Leaked hack-client command detection for commands such as `.bind`, `.setcheckbox`, `.enabledhax`, `.xray`, and similar client control commands.
 - Unified flag pipeline so movement, combat, inventory, world, voting, probation, and alerts all use the same evidence path.
 - Staff alert compression so operators see compact messages like `HorizontalDrift x6` instead of chat spam.
