@@ -10,7 +10,7 @@ This GitHub repository is **release-only**. It distributes compiled plugin jars 
 
 Latest snapshot line:
 
-- `v0.1.2-SNAPSHOT`
+- `v0.1.3-SNAPSHOT`
 
 Target platform:
 
@@ -28,7 +28,7 @@ This is an early snapshot build, not a final production anticheat. The current p
 - Inventory-walk detection while player inventories are open.
 - Far-place and ghost-hand interaction checks.
 - Nuker, fast-break, and auto-drop burst checks.
-- Liquid-walk and wall-climb checks for Jesus/Spider-style movement.
+- Experimental liquid-walk and wall-climb checks are present but disabled by default until packet-level evidence is added.
 - Velocity grace handling to reduce false movement punishments after knockback or server-applied velocity.
 - Fast-consume and fast-bow timing checks.
 - Hotbar macro detection for extreme slot-switch bursts.
