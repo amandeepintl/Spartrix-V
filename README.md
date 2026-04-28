@@ -17,25 +17,27 @@ Target platform:
 - Paper `1.21.11`
 - Java `21`
 
-## What SPARTRIX-V Does Today
+## What This Snapshot Detects
 
-This is an early snapshot build, not a final production anticheat. The current plugin provides a practical Paper-event foundation:
+This is still an early snapshot, but the current jar includes a stronger Paper-event detection layer:
 
-- Movement drift checks for obvious speed, flight, glide, step, high-jump, bunny-hop, and boat-fly style behavior.
-- Combat reach validation with hit distance checks.
-- Basic aura heuristics for bad attack angle and extremely fast target switching.
+- `SustainedSpeed` and `HorizontalDrift` checks for speed and horizontal movement abuse.
+- `FlyAscend` checks for sustained upward fly hacks.
+- `LiquidWalk` checks for Jesus/water-walk behavior.
+- `AirPlace` checks for suspended fly/scaffold-style block placement.
+- `NoFall` checks using fall-distance tracking and landing validation.
+- `FastBreak`, `InstantBreak`, Nuker-style burst, and AutoDrop burst checks.
+- Combat reach validation.
+- Basic aura heuristics for bad attack angle and fast target switching.
 - Auto-clicker entropy checks using CPS and click interval consistency.
 - Inventory-walk detection while player inventories are open.
 - Far-place and ghost-hand interaction checks.
-- Nuker, fast-break, and auto-drop burst checks.
-- Experimental liquid-walk and wall-climb checks are present but disabled by default until packet-level evidence is added.
-- Velocity grace handling to reduce false movement punishments after knockback or server-applied velocity.
 - Fast-consume and fast-bow timing checks.
 - Hotbar macro detection for extreme slot-switch bursts.
 - Leaked hack-client command detection for commands such as `.bind`, `.setcheckbox`, `.enabledhax`, `.xray`, and similar client control commands.
-- Unified flag pipeline so movement, combat, inventory, world, voting, probation, and alerts all use the same evidence path.
-- Staff alert compression so operators see compact messages like `HorizontalDrift x6` instead of chat spam.
-- Sustained-cheat kick policy using a safer default: `5 seconds` + `6 detections` + `180 correlation score`.
+- Unified flag pipeline for movement, combat, inventory, world, voting, probation, setbacks, and alerts.
+- Staff alert compression so operators see compact messages like `FlyAscend x6` instead of chat spam.
+- Sustained-cheat kick policy using `5 seconds` + `6 detections` + `180 correlation score`.
 - Community oversight with `/hackflags`, voting, probation tracking, and staff case-file support.
 
 ## Commands
@@ -46,11 +48,29 @@ This is an early snapshot build, not a final production anticheat. The current p
 - `/hackflags` opens the public suspect interface.
 - `/hackflags vote <player>` records a community vote.
 
-## Important Detection Limits
+## Configuration Note
 
-Some hacked-client modules are not directly provable from the server alone. Visual or local-only modules such as ESP overlays, Fullbright, NoFog, NoOverlay, keybind menus, GUI themes, and client settings do not send reliable evidence to Paper by themselves.
+If you already installed an older snapshot, your generated `plugins/SpartrixV/config.yml` will not be overwritten automatically. Compare the new default config or regenerate it on a test server if new checks are not firing.
 
-SPARTRIX-V focuses on what a server can actually observe: movement, combat, clicking, inventory actions, block interactions, command leaks, packet-like behavior exposed through events, and repeated suspicious patterns.
+Important defaults in this snapshot include:
+
+```yaml
+checks:
+  liquid-walk:
+    enabled: true
+  air-place:
+    enabled: true
+  no-fall:
+    enabled: true
+  world-abuse:
+    enabled: true
+```
+
+## Detection Limits
+
+This build is event-level, not packet-level yet. It can detect many visible cheat behaviors, but serious anticheat accuracy requires a packet layer for pre-Bukkit movement, block placement faces, ground spoofing, transaction timing, and rotation analysis.
+
+Client-only visuals such as ESP overlays, Fullbright, NoFog, NoOverlay, keybind menus, GUI themes, and client settings are not directly provable from the server alone.
 
 ## Installation
 
