@@ -1,4 +1,4 @@
-# SPARTRIX-V
+# SPARTRIX-V.
 
 ## The Absolute Enforcement Nexus
 
