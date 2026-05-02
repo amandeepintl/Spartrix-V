@@ -2,7 +2,7 @@
 
 ## The Absolute Enforcement Nexus
 
-SPARTRIX-V is a Minecraft Paper anticheat focused on server-side enforcement, behavioral correlation, compact staff alerts, and moderation workflows.
+SPARTRIX-V is a Minecraft Paper anticheat focused on server-side enforcement, readable staff alerts, behavioral correlation, moderation workflows, and low-overhead event-level detection.
 
 This GitHub repository is **release-only**. It distributes compiled plugin jars and release notes. Source code is not published here.
 
@@ -10,7 +10,7 @@ This GitHub repository is **release-only**. It distributes compiled plugin jars 
 
 Latest snapshot line:
 
-- `v0.1.3-SNAPSHOT`
+- `v0.1.4-SNAPSHOT`
 
 Target platform:
 
@@ -19,25 +19,24 @@ Target platform:
 
 ## What This Snapshot Detects
 
-This is still an early snapshot, but the current jar includes a stronger Paper-event detection layer:
+This is still a snapshot, but the current jar has a broader and cleaner event-level detection layer:
 
-- `SustainedSpeed` and `HorizontalDrift` checks for speed and horizontal movement abuse.
-- `FlyAscend` checks for sustained upward fly hacks.
-- `LiquidWalk` checks for Jesus/water-walk behavior.
-- `AirPlace` checks for suspended fly/scaffold-style block placement.
-- `NoFall` checks using fall-distance tracking and landing validation.
-- `FastBreak`, `InstantBreak`, Nuker-style burst, and AutoDrop burst checks.
-- Combat reach validation.
-- Basic aura heuristics for bad attack angle and fast target switching.
-- Auto-clicker entropy checks using CPS and click interval consistency.
-- Inventory-walk detection while player inventories are open.
-- Far-place and ghost-hand interaction checks.
-- Fast-consume and fast-bow timing checks.
-- Hotbar macro detection for extreme slot-switch bursts.
+- `Flying` detection for fly/hover/air-strafe movement with setback locking.
+- `Speed Hack` detection for sustained illegal horizontal movement.
+- `No Fall` validation with delayed landing checks and suppression after fly/setback events.
+- `Jesus` checks for water-walk/liquid-walk behavior.
+- `Air Place`, `Far Place`, and `Ghost Hand` checks for invalid block placement and through-wall interaction.
+- `Fast Break`, `Nuker`, and `Auto Drop` world-abuse checks.
+- `Anti Cactus` damage-integrity enforcement with server-side damage forcing.
+- `Anti Knockback` checks for missing knockback after velocity.
+- `Anti Hunger` checks for cancelled or missing hunger loss during sprinting.
+- `Entity Push` checks for players resisting normal entity push behavior.
+- `Reach`, `Kill Aura`, `Multi Aura`, and `Auto Clicker` combat/click checks.
+- `Inventory Move`, `No Slow`, `Fast Eat`, `Fast Bow`, `Hotbar Macro`, `Boat Fly`, and `Vehicle Speed` checks.
 - Leaked hack-client command detection for commands such as `.bind`, `.setcheckbox`, `.enabledhax`, `.xray`, and similar client control commands.
 - Unified flag pipeline for movement, combat, inventory, world, voting, probation, setbacks, and alerts.
-- Staff alert compression so operators see compact messages like `FlyAscend x6` instead of chat spam.
-- Sustained-cheat kick policy using `5 seconds` + `6 detections` + `180 correlation score`.
+- Compact staff alerts using readable names instead of internal engine names.
+- Sustained-cheat kick policy capped at `3 seconds`.
 - Community oversight with `/hackflags`, voting, probation tracking, and staff case-file support.
 
 ## Commands
@@ -46,6 +45,7 @@ This is still an early snapshot, but the current jar includes a stronger Paper-e
 - `/sv status` shows plugin status.
 - `/sv reload` reloads configuration.
 - `/hackflags` opens the public suspect interface.
+- `/hackflags playtime` shows the playtime used for voting eligibility.
 - `/hackflags vote <player>` records a community vote.
 
 ## Configuration Note
@@ -55,20 +55,33 @@ If you already installed an older snapshot, your generated `plugins/SpartrixV/co
 Important defaults in this snapshot include:
 
 ```yaml
+thresholds:
+  alerts:
+    kick-after-seconds: 3
+
 checks:
-  liquid-walk:
+  anti-cactus:
     enabled: true
-  air-place:
+  anti-knockback:
     enabled: true
-  no-fall:
+  anti-hunger:
     enabled: true
-  world-abuse:
+  entity-push:
     enabled: true
 ```
 
+## Performance Notes
+
+SPARTRIX-V `0.1.4-SNAPSHOT` keeps low-end servers in mind:
+
+- Anti Cactus tracks only active cactus-contact suspects instead of scanning every online player globally.
+- Auto Clicker no longer performs target-block lookup on every arm swing.
+- Most checks are event-driven and avoid packet-level hooks for now.
+- Heavy packet simulation is not included in this snapshot.
+
 ## Detection Limits
 
-This build is event-level, not packet-level yet. It can detect many visible cheat behaviors, but serious anticheat accuracy requires a packet layer for pre-Bukkit movement, block placement faces, ground spoofing, transaction timing, and rotation analysis.
+This build is event-level, not packet-level yet. It can detect many visible cheat behaviors, but serious anticheat accuracy still requires a packet layer for pre-Bukkit movement, block placement faces, ground spoofing, transaction timing, and rotation analysis.
 
 Client-only visuals such as ESP overlays, Fullbright, NoFog, NoOverlay, keybind menus, GUI themes, and client settings are not directly provable from the server alone.
 
